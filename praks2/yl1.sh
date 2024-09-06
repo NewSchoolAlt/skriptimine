@@ -4,9 +4,9 @@
 # Väljasta "Tere, " ilma reavahetuseta
 echo -n "Tere, "
 
-# Tekita kasutaja nimi, muuda esimene täht suureks ja väljasta ta ilma reavahetuseta
 username=$(whoami)
-echo -n "${username^}"
 
+echo -n "${username^}"
 # Väljasta "!" reavahetusega
 echo "!"
+echo " "
