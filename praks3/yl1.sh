@@ -1,10 +1,6 @@
 #!/bin/bash
-echo " "
-
-# Küsime nime
+# Küsime 
 echo -n "Sisesta oma ees- ja perenimi: "
 read eesnimi perenimi
-# esitame talle nime
+# Tervitame 
 echo "Tere tulemast, $eesnimi $perenimi"
-
-echo " "
