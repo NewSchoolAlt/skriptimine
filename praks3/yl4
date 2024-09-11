@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Küsi useriltt, mitu reisijat on grupis
+read -p "Sisesta reisijate arv: " reisijad
+
+# Küsi userilt, mitu kohta on ühes bussis
+read -p "Sisesta kohtade arv ühes bussis: " kohad
+
+# Arvuta, mitu bussi on täielikult täidetud
+taidetud_bussid=$(expr $reisijad / $kohad)
+
+# Arvuta, mitu reisijat jääb üle 
+ulejaanud_reisijad=$(expr $reisijad % $kohad)
+
+# näitame tulemust
+echo "täielikult täidetud busse: $taidetud_bussid"
+echo "Ülejäanud reisiaid: $ulejaanud_reisijad"
