@@ -48,13 +48,12 @@ fi
 #Teeme output katalooge
 mkdir -p "$output_dir"
 
-#Kasutades sed käsku võtame input faili, lõikane sealt ülejäänud jama ära, jätame alles ainult eesnimed, ning salvestame Määratud faili
-cut -d',' -f2 "$input_file" | sed 's/;.*//;s/[0-9]*-.*//;s/^[ \t]*//;s/[ \t]*$//' > "$first_names_file"
+#Kasutades awk käsku võtame input faili, lõikane sealt ülejäänud jama ära, jätame alles ainult eesnimed, ning salvestame Määratud faili
+cut -d',' -f2 "$input_file" | awk -F';' '{print $1}' | awk '{gsub(/[0-9]*-.*|^[ \t]*|[ \t]*$/, ""); print}' > "$first_names_file"
 
 #Sama loogikaga on ka perenimede fail ja domeenide fail koostatud, ei viitsi pikki kommentaare panna
-cut -d',' -f1 "$input_file" | tr '[:upper:]' '[:lower:]' | sed 's/^[ \t]*//;s/[ \t]*$//' > "$last_names_file"
-cut -d'-' -f2 "$input_file" | sed 's/^[ \t]*//;s/[ \t]*$//' > "$domains_file"
-
+cut -d',' -f1 "$input_file" | tr '[:upper:]' '[:lower:]' | awk '{gsub(/^[ \t]*|[ \t]*$/, ""); print}' > "$last_names_file"
+cut -d'-' -f2 "$input_file" | awk '{gsub(/^[ \t]*|[ \t]*$/, ""); print}' > "$domains_file"
 
 #Loob kasutajanimed ja e-mailid failid
 paste -d"." "$first_names_file" "$last_names_file" > "$usernames_file"
