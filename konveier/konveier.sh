@@ -1,5 +1,19 @@
 #!/bin/bash
 echo " "
+fastfetch
+echo " "
+
+# Lisame spinneri ootamise animatsiooni
+echo -"Ootan, palun oota"
+echo " "
+spin='/-\|'
+i=0
+while [ "$i" -lt 10 ]; do  # Muuda 10 soovitud ooteaja järgi
+    printf "\r%s" "${spin:i++%${#spin}:1}"  # Kuvab spinneri
+    sleep 0.2  # Ooteaeg
+done
+echo -e "\r"  # Tühjendab spinneri rea
+
 
 #Määrame output kataloogi
 output_dir="./konveier"
