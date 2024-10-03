@@ -1,10 +1,10 @@
 #!/bin/bash
 echo " "
-fastfetch | /usr/games/lolcat
+
 echo " "
 
 # Lisame spinneri ootamise animatsiooni
-echo -"Ootan, palun oota"
+echo -"Töötlen, palun oota"
 echo " "
 spin='/-\|'
 i=0
@@ -36,7 +36,7 @@ emails_file="$output_dir/meilid.txt"
 if [ $# -ne 1 ]; then
     echo "Vali inimesed_fail fzf abil (kasuta nooleklahve ja Enterit):"
     terminal_width=$(tput cols)  # Uus rida, et saada terminali laius
-    input_file=$(find . -type f | fzf --header="Vali fail ja vajuta Enter" --preview="batcat ")  # Uus rida, et kuvada värviline ASCII kunst
+    input_file=$(find . -type f | fzf --header="Vali fail ja vajuta Enter" --preview="batcat | /usr/games/lolcat ")
     if [ -z "$input_file" ]; then
         echo "Faili ei valitud, väljun."
         exit 1
@@ -63,13 +63,13 @@ paste -d"@" "$usernames_file" "$domains_file" > "$emails_file"
 
 
 # Lisame spinneri ootamise animatsiooni
-echo -"Ootan, palun oota"
+echo -"töötlen valikut, palun oota"
 echo " "
 spin='/-\|'
 i=0
 while [ "$i" -lt 10 ]; do  # Muuda 10 soovitud ooteaja järgi
     printf "\r%s" "${spin:i++%${#spin}:1}"  # Kuvab spinneri
-    sleep 0.2  # Ooteaeg
+    sleep 0.22  # Ooteaeg
 done
 echo -e "\r"  # Tühjendab spinneri rea
 
@@ -83,12 +83,14 @@ echo "E-mailid: $emails_file"
 
 # Küsi kasutajalt, kas ta soovib vaadata genereeritud faile
 while true; do
-    if (whiptail --yesno "Kas soovite vaadata genereeritud faile?" 8 45); then
+    read -p "Kas soovite vaadata genereeritud faile? (jah/ei): " answer
+    if [[ "$answer" == "jah" ]]; then
         # Kasutame fzf, et valida fail
         selected_file=$(printf "$first_names_file\n$last_names_file\n$domains_file\n$usernames_file\n$emails_file" | fzf --header="Vali fail ja vajuta Enter")
         if [ -n "$selected_file" ]; then
-            # Kasutame less, et kuvada faili sisu
-            less "$selected_file"
+            # Kasutame batcat, et kuvada faili sisu
+            batcat "$selected_file"
+            read -p "Vajutage Enter, et jätkata..."  # Ootab kasutaja sisestust
         fi
     else
         break
@@ -167,16 +169,14 @@ done
 
 
 
-
-
 echo "master hackerman type shit tuleb kohe"
 # Lisame spinneri ootamise animatsiooni
-echo  "Ootan, palun oota"
+echo  "töötlen puhastust, palun oota!!"
 spin='/-\|'
 i=0
 while [ "$i" -lt 10 ]; do  # Muuda 10 soovitud ooteaja järgi
     printf "\r%s" "${spin:i++%${#spin}:1}"  # Kuvab spinneri
-    sleep 0.2  # Ooteaeg
+    sleep 0.6  # Ooteaeg
 done
 echo -e "\r"  # Tühjendab spinneri rea
 #Fnacy stuff mis mõtlesin, et panen juurde kuna olen masterhackerman yes yes
