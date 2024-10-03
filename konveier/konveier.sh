@@ -1,6 +1,6 @@
 #!/bin/bash
 echo " "
-fastfetch
+fastfetch | /usr/games/lolcat
 echo " "
 
 # Lisame spinneri ootamise animatsiooni
@@ -36,7 +36,7 @@ emails_file="$output_dir/meilid.txt"
 if [ $# -ne 1 ]; then
     echo "Vali inimesed_fail fzf abil (kasuta nooleklahve ja Enterit):"
     terminal_width=$(tput cols)  # Uus rida, et saada terminali laius
-    input_file=$(find . -type f | fzf --header="Vali fail ja vajuta Enter" --preview="cat {} | toilet --gay --width=$terminal_width")  # Uus rida, et kuvada värviline ASCII kunst
+    input_file=$(find . -type f | fzf --header="Vali fail ja vajuta Enter" --preview="batcat ")  # Uus rida, et kuvada värviline ASCII kunst
     if [ -z "$input_file" ]; then
         echo "Faili ei valitud, väljun."
         exit 1
@@ -49,11 +49,12 @@ fi
 mkdir -p "$output_dir"
 
 #Kasutades awk käsku võtame input faili, lõikane sealt ülejäänud jama ära, jätame alles ainult eesnimed, ning salvestame Määratud faili
-cut -d',' -f2 "$input_file" | awk -F';' '{print $1}' | awk '{gsub(/[0-9]*-.*|^[ \t]*|[ \t]*$/, ""); print}' > "$first_names_file"
+cut -d',' -f2 "$input_file" | tr '[:upper:]' '[:lower:]' | awk -F';' '{print $1}' | awk '{gsub(/[0-9]*-.*|^[ \t]*|[ \t]*$/, ""); print}' > "$first_names_file"
 
 #Sama loogikaga on ka perenimede fail ja domeenide fail koostatud, ei viitsi pikki kommentaare panna
 cut -d',' -f1 "$input_file" | tr '[:upper:]' '[:lower:]' | awk '{gsub(/^[ \t]*|[ \t]*$/, ""); print}' > "$last_names_file"
-cut -d'-' -f2 "$input_file" | awk '{gsub(/^[ \t]*|[ \t]*$/, ""); print}' > "$domains_file"
+cut -d'-' -f2 "$input_file" | tr '[:upper:]' '[:lower:]' | awk '{gsub(/^[ \t]*|[ \t]*$/, ""); print}' > "$domains_file"
+
 
 #Loob kasutajanimed ja e-mailid failid
 paste -d"." "$first_names_file" "$last_names_file" > "$usernames_file"
@@ -80,10 +81,19 @@ echo "Kasutajatunnused: $usernames_file"
 echo "E-mailid: $emails_file"
 
 
-
-
-
-
+# Küsi kasutajalt, kas ta soovib vaadata genereeritud faile
+while true; do
+    if (whiptail --yesno "Kas soovite vaadata genereeritud faile?" 8 45); then
+        # Kasutame fzf, et valida fail
+        selected_file=$(printf "$first_names_file\n$last_names_file\n$domains_file\n$usernames_file\n$emails_file" | fzf --header="Vali fail ja vajuta Enter")
+        if [ -n "$selected_file" ]; then
+            # Kasutame less, et kuvada faili sisu
+            less "$selected_file"
+        fi
+    else
+        break
+    fi
+done
 
 
 
@@ -285,4 +295,4 @@ echo "===================="
 
 
 
-figlet "made by OLEV!" 
+figlet "made by OLEV!" | /usr/games/lolcat 
